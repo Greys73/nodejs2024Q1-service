@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { validate } from 'uuid';
 import {
   BadRequestException,
@@ -12,35 +13,40 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UserService {
   getAll() {
-    return users.getAll();
+    const allUsers = users.getAll().map((_user) => {
+      const { password, ...user } = _user;
+      return user;
+    });
+    return allUsers;
   }
 
   getById(id: string) {
-    const user = users.getById(id);
+    const { password, ...user } = users.getById(id) || { password: null };
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
-    if (!user) throw new NotFoundException('User not found');
+    if (!('id' in user)) throw new NotFoundException('User not found');
     return user;
   }
 
   create(dto: CreateUserDto) {
-    return users.create(dto);
+    const { password, ...user } = users.create(dto);
+    return user;
   }
 
   update(id: string, dto: UpdateUserDto) {
-    const user = users.getById(id);
+    const _user = users.getById(id);
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
-    if (!user) throw new NotFoundException('User not found');
-    if (user.password !== dto.oldPassword) {
+    if (!_user) throw new NotFoundException('User not found');
+    if (_user.password !== dto.oldPassword) {
       throw new ForbiddenException('Old password is incorrect');
     }
-    users.update(id, dto);
+    const { password, ...user } = users.update(id, dto);
     return user;
   }
 
   delete(id: string) {
-    const user = users.getById(id);
+    const { password, ...user } = users.getById(id) || { password: null };
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
-    if (!user) throw new NotFoundException('User not found');
+    if (!('id' in user)) throw new NotFoundException('User not found');
     users.delete(id);
   }
 }

@@ -22,7 +22,7 @@ class UsersDB {
   create = (data: CreateUserDto) => {
     const { login, password } = data;
     const id = uuid();
-    const version = 0;
+    const version = 1;
     const createdAt = Date.now();
     const updatedAt = createdAt;
     const user: User = { id, login, password, version, createdAt, updatedAt };
