@@ -1,17 +1,18 @@
-import { IsString, IsDefined, IsNumber } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsUUID, Min } from 'class-validator';
 
 export class TrackDto {
   @IsString()
-  @IsDefined()
   name: string;
 
-  @IsString()
+  @IsOptional()
+  @IsUUID('4')
   artistId: string | null;
 
-  @IsString()
+  @IsOptional()
+  @IsUUID('4')
   albumId: string | null;
 
-  @IsNumber()
-  @IsDefined()
+  @IsInt()
+  @Min(0)
   duration: number;
 }
