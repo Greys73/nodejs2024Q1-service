@@ -4,14 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import artists from 'src/inMemoryDB/artists';
-import { Artist } from 'src/types/types';
 import { validate } from 'uuid';
 import { ArtistDto } from './dto/artist.dto';
 
 @Injectable()
 export class ArtistService {
   getAll() {
-    return artists.getAll() as unknown as Artist[];
+    return artists.getAll();
   }
 
   getById(id: string) {

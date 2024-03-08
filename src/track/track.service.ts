@@ -4,14 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import tracks from 'src/inMemoryDB/tracks';
-import { Track } from 'src/types/types';
 import { validate } from 'uuid';
 import { TrackDto } from './dto/track.dto';
 
 @Injectable()
 export class TrackService {
   getAll() {
-    return tracks.getAll() as unknown as Track[];
+    return tracks.getAll();
   }
 
   getById(id: string) {
