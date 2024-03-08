@@ -36,7 +36,7 @@ export class ArtistService {
   delete(id: string) {
     const item = artists.getById(id);
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
-    if (!item) throw new NotFoundException('User not found');
+    if (!item) throw new NotFoundException('Artist not found');
     artists.delete(id);
   }
 }
