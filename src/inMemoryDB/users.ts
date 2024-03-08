@@ -10,17 +10,17 @@ class UsersDB {
     this.users = [];
   }
 
-  getUsers = () => this.users;
+  getAll = () => this.users;
 
-  getUser = (id: string) => this.users.find((user) => user.id === id);
+  getById = (id: string) => this.users.find((item) => item.id === id);
 
-  deleteUser = (id: string) => {
-    const index = this.users.findIndex((user) => user.id === id);
+  delete = (id: string) => {
+    const index = this.users.findIndex((item) => item.id === id);
     this.users.splice(index, 1);
   };
 
-  addUser = (_user: CreateUserDto) => {
-    const { login, password } = _user;
+  create = (data: CreateUserDto) => {
+    const { login, password } = data;
     const id = uuid();
     const version = 0;
     const createdAt = Date.now();
@@ -30,9 +30,9 @@ class UsersDB {
     return user;
   };
 
-  updateUser = (id: string, _user: UpdateUserDto) => {
-    const { oldPassword, newPassword } = _user;
-    const user = this.getUser(id);
+  update = (id: string, data: UpdateUserDto) => {
+    const { oldPassword, newPassword } = data;
+    const user = this.getById(id);
     if (user && oldPassword === user.password) {
       user.password = newPassword;
       user.version += 1;
