@@ -6,6 +6,7 @@ import {
 import { validate } from 'uuid';
 import { AlbumDto } from './dto/album.dto';
 import albums from 'src/inMemoryDB/albums';
+import tracks from 'src/inMemoryDB/tracks';
 
 @Injectable()
 export class AlbumService {
@@ -36,6 +37,14 @@ export class AlbumService {
     const item = albums.getById(id);
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
     if (!item) throw new NotFoundException('Album not found');
+    tracks
+      .getAll()
+      .filter((track) => track.albumId === id)
+      .forEach((track) => {
+        const { id, ...data } = track;
+        data.albumId = null;
+        tracks.update(id, data);
+      });
     albums.delete(id);
   }
 }
