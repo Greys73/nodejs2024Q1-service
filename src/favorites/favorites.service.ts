@@ -17,9 +17,15 @@ export class FavoritesService {
   getAll() {
     const favs = favorites.getAll();
     return {
-      tracks: favs.tracks.map((item) => tracks.getById(item)),
-      albums: favs.albums.map((item) => albums.getById(item)),
-      artists: favs.artists.map((item) => artists.getById(item)),
+      tracks: favs.tracks
+        .map((item) => tracks.getById(item))
+        .filter((item) => !!item),
+      albums: favs.albums
+        .map((item) => albums.getById(item))
+        .filter((item) => !!item),
+      artists: favs.artists
+        .map((item) => artists.getById(item))
+        .filter((item) => !!item),
     };
   }
 
