@@ -6,6 +6,7 @@ import {
 import tracks from 'src/inMemoryDB/tracks';
 import { validate } from 'uuid';
 import { TrackDto } from './dto/track.dto';
+import favorites from 'src/inMemoryDB/favorites';
 
 @Injectable()
 export class TrackService {
@@ -36,6 +37,7 @@ export class TrackService {
     const item = tracks.getById(id);
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
     if (!item) throw new NotFoundException('Track not found');
+    favorites.remTrack(id);
     tracks.delete(id);
   }
 }

@@ -8,6 +8,7 @@ import { validate } from 'uuid';
 import { ArtistDto } from './dto/artist.dto';
 import tracks from 'src/inMemoryDB/tracks';
 import albums from 'src/inMemoryDB/albums';
+import favorites from 'src/inMemoryDB/favorites';
 
 @Injectable()
 export class ArtistService {
@@ -54,6 +55,7 @@ export class ArtistService {
         data.artistId = null;
         albums.update(id, data);
       });
+    favorites.remArtist(id);
     artists.delete(id);
   }
 }

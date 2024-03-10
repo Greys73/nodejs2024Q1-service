@@ -7,6 +7,7 @@ import { validate } from 'uuid';
 import { AlbumDto } from './dto/album.dto';
 import albums from 'src/inMemoryDB/albums';
 import tracks from 'src/inMemoryDB/tracks';
+import favorites from 'src/inMemoryDB/favorites';
 
 @Injectable()
 export class AlbumService {
@@ -45,6 +46,7 @@ export class AlbumService {
         data.albumId = null;
         tracks.update(id, data);
       });
+    favorites.remAlbum(id);
     albums.delete(id);
   }
 }
