@@ -16,6 +16,9 @@ git clone {repository URL}
 ```
 npm install
 ```
+## Creating `.env` file
+
+Create `.env` file with PORT value. Service should listen on PORT `4000` by default.
 
 ## Running application
 
@@ -29,7 +32,7 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ## Testing
 
-After application running open new terminal and enter:
+**After application running** open new terminal and enter:
 
 To run all tests without authorization
 
