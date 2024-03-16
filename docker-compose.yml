@@ -1,0 +1,19 @@
+version: '3'
+services:
+  app:
+    container_name: 'app'
+    build:
+      context: .
+      dockerfile: ./Dockerfile.app
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - homelib
+    restart: unless-stopped
+    volumes:
+      - ./src:/app/src
+networks:
+  homelib:
+    driver: bridge
