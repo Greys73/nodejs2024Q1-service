@@ -8,5 +8,5 @@ RUN npm run build
 FROM node:20-alpine
 WORKDIR /app
 COPY --from=build /app /app
-EXPOSE 4000
+EXPOSE $PORT
 CMD npm run start:dev

@@ -1,7 +1,11 @@
-version: '3'
+version: '1'
 services:
+
   app:
     container_name: 'app'
+    # image: greys73/service-app
+    depends_on:
+      - database
     build:
       context: .
       dockerfile: ./Dockerfile.app
@@ -14,6 +18,30 @@ services:
     restart: unless-stopped
     volumes:
       - ./src:/app/src
+
+  database:
+    container_name: 'database'
+    # image: greys73/database
+    build:
+      context: .
+      dockerfile: ./Dockerfile.db
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    networks:
+      - homelib
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - db_logs:/var/log/postgresql
+
+volumes:
+  db_data:
+  db_logs:
 networks:
   homelib:
     driver: bridge
