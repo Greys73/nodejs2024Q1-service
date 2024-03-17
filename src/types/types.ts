@@ -3,8 +3,8 @@ export interface User {
   login: string;
   password: string;
   version: number;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: number | Date;
+  updatedAt: number | Date;
 }
 
 export interface Artist {
