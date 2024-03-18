@@ -5,48 +5,53 @@ import {
 } from '@nestjs/common';
 import { validate } from 'uuid';
 import { AlbumDto } from './dto/album.dto';
-import albums from 'src/inMemoryDB/albums';
-import tracks from 'src/inMemoryDB/tracks';
-import favorites from 'src/inMemoryDB/favorites';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AlbumService {
-  getAll() {
-    return albums.getAll();
+  constructor(private db: PrismaService) {}
+  async getAll() {
+    return await this.db.album.findMany();
   }
 
-  getById(id: string) {
-    const item = albums.getById(id);
+  async getById(id: string) {
+    const item = await this.db.album.findUnique({ where: { id } });
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
     if (!item) throw new NotFoundException('Album not found');
     return item;
   }
 
-  create(dto: AlbumDto) {
-    return albums.create(dto);
+  async create(dto: AlbumDto) {
+    return await this.db.album.create({ data: dto });
   }
 
-  update(id: string, dto: AlbumDto) {
-    const item = albums.getById(id);
+  async update(id: string, dto: AlbumDto) {
+    const item = await this.db.album.findUnique({ where: { id } });
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
     if (!item) throw new NotFoundException('Album not found');
-    albums.update(id, dto);
-    return item;
+    const album = await this.db.album.update({
+      where: { id },
+      data: dto,
+    });
+    return album;
   }
 
-  delete(id: string) {
-    const item = albums.getById(id);
+  async delete(id: string) {
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
-    if (!item) throw new NotFoundException('Album not found');
-    tracks
-      .getAll()
-      .filter((track) => track.albumId === id)
-      .forEach((track) => {
-        const { id, ...data } = track;
-        data.albumId = null;
-        tracks.update(id, data);
-      });
-    favorites.remAlbum(id);
-    albums.delete(id);
+    try {
+      await this.db.album.delete({ where: { id } });
+      const tracks = await this.db.track.findMany();
+      tracks
+        .filter((track) => track.albumId === id)
+        .forEach(async (track) => {
+          const { id, ...data } = track;
+          data.albumId = null;
+          await this.db.track.update({ where: { id }, data });
+        });
+    } catch {
+      throw new NotFoundException('Album not found');
+    }
+    // favorites.remAlbum(id);
+    // albums.delete(id);
   }
 }

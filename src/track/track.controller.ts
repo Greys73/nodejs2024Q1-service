@@ -42,6 +42,6 @@ export class TrackController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
-    this.trackService.delete(id);
+    return this.trackService.delete(id);
   }
 }
