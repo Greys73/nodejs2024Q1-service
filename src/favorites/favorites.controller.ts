@@ -35,18 +35,18 @@ export class FavoritesController {
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remTrack(@Param('id') id: string) {
-    this.favoritesService.remTrack(id);
+    return this.favoritesService.remTrack(id);
   }
 
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remAlbum(@Param('id') id: string) {
-    this.favoritesService.remAlbum(id);
+    return this.favoritesService.remAlbum(id);
   }
 
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remArtist(@Param('id') id: string) {
-    this.favoritesService.remArtist(id);
+    return this.favoritesService.remArtist(id);
   }
 }
