@@ -41,17 +41,17 @@ export class AlbumService {
     try {
       await this.db.album.delete({ where: { id } });
       const tracks = await this.db.track.findMany();
-      tracks
-        .filter((track) => track.albumId === id)
-        .forEach(async (track) => {
-          const { id, ...data } = track;
-          data.albumId = null;
-          await this.db.track.update({ where: { id }, data });
-        });
+      await Promise.all(
+        tracks
+          .filter((track) => track.albumId === id)
+          .map(async (track) => {
+            const { id, ...data } = track;
+            data.albumId = null;
+            return this.db.track.update({ where: { id }, data });
+          }),
+      );
     } catch {
       throw new NotFoundException('Album not found');
     }
-    // favorites.remAlbum(id);
-    // albums.delete(id);
   }
 }

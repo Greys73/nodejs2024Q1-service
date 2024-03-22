@@ -43,6 +43,5 @@ export class TrackService {
     } catch {
       throw new NotFoundException('Track not found');
     }
-    // favorites.remTrack(id);
   }
 }

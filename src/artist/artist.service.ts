@@ -40,41 +40,30 @@ export class ArtistService {
     if (!validate(id)) throw new BadRequestException('Invalid ID format');
     try {
       await this.db.artist.delete({ where: { id } });
+
       const tracks = await this.db.track.findMany();
-      tracks
-        .filter((track) => track.artistId === id)
-        .forEach(async (track) => {
-          const { id, ...data } = track;
-          data.artistId = null;
-          await this.db.track.update({ where: { id }, data });
-        });
+      await Promise.all(
+        tracks
+          .filter((track) => track.artistId === id)
+          .map(async (track) => {
+            const { id, ...data } = track;
+            data.artistId = null;
+            return this.db.track.update({ where: { id }, data });
+          }),
+      );
+
       const albums = await this.db.album.findMany();
-      albums
-        .filter((track) => track.artistId === id)
-        .forEach(async (track) => {
-          const { id, ...data } = track;
-          data.artistId = null;
-          await this.db.album.update({ where: { id }, data });
-        });
+      await Promise.all(
+        albums
+          .filter((track) => track.artistId === id)
+          .map(async (track) => {
+            const { id, ...data } = track;
+            data.artistId = null;
+            return this.db.album.update({ where: { id }, data });
+          }),
+      );
     } catch {
       throw new NotFoundException('Artist not found');
     }
-    // tracks
-    //   .getAll()
-    //   .filter((track) => track.artistId === id)
-    //   .forEach((track) => {
-    //     const { id, ...data } = track;
-    //     data.artistId = null;
-    //     tracks.update(id, data);
-    //   });
-    // albums
-    //   .getAll()
-    //   .filter((album) => album.artistId === id)
-    //   .forEach((album) => {
-    //     const { id, ...data } = album;
-    //     data.artistId = null;
-    //     albums.update(id, data);
-    //   });
-    // favorites.remArtist(id);
   }
 }
