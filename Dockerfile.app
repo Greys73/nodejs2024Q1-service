@@ -9,4 +9,4 @@ FROM node:20-alpine
 WORKDIR /app
 COPY --from=build /app /app
 EXPOSE $PORT
-CMD npm run start:dev
+CMD npx prisma migrate dev && npm run start:dev
