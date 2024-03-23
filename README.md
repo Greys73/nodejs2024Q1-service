@@ -21,14 +21,29 @@ npm install
 Create `.env` file with PORT value. Service should listen on PORT `4000` by default.
 
 ## Running application
-
+To run application and databse in docker containers
 ```
-npm start
+docker-compose up
+```
+
+To build and run docker containers with application and databse
+```
+docker-compose up --build
 ```
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Vulnerabilities scanning
+To run script for scanning Application:
+```
+npm run scan:app
+```
+To run script for scanning Database:
+```
+npm run scan:db
+```
 
 ## Testing
 
